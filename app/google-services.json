@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "343788170247",
+    "project_id": "vidaapp-3da58",
+    "storage_bucket": "vidaapp-3da58.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343788170247:android:c574ac2ee97c6865e98ea2",
+        "android_client_info": {
+          "package_name": "com.example.vidaapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5WXblBeukRQ227OUmv2cmoZjmShagsyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
