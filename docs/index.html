@@ -3,91 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Igreja Cristã Ministério Vida - Aplicativo</title>
+    <title>Igreja Cristã Ministério Vida - Aplicativo Oficial</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navegação -->
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-brand">
-                <h1>🙏 Igreja Cristã Ministério Vida</h1>
+                <svg class="logo" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <style>.logo-dark{fill:#1a7d4d;}.logo-light{fill:#469334;}.logo-accent{fill:#77b42a;}</style>
+                    </defs>
+                    <path class="logo-dark" d="M394.8,276A186.21,186.21,0,0,1,580.3,445.76h56.33A242.33,242.33,0,0,0,394.8,219.81c-128.13,0-233.3,99.94-241.82,226h56.34C217.71,350.76,297.67,276,394.8,276Z"/>
+                </svg>
+                <h1>Ministério Vida</h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="#inicio">Início</a></li>
-                <li><a href="#features">Funcionalidades</a></li>
+                <li><a href="#features">Recursos</a></li>
                 <li><a href="#download">Download</a></li>
                 <li><a href="#contato">Contato</a></li>
             </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section Premium -->
     <section id="inicio" class="hero">
+        <div class="hero-background"></div>
         <div class="container hero-content">
             <div class="hero-text">
-                <h1>Bem-vindo ao Ministério Vida</h1>
-                <p>Conecte-se com sua comunidade, receba benção espiritual e participe de forma ativa em nossa Igreja</p>
-                <a href="#download" class="btn btn-primary">Baixar App Agora</a>
+                <h1>Conecte-se com sua Fé</h1>
+                <p>Acesse ensinamentos, participe da comunidade e cresça espiritualmente através do Ministério Vida</p>
+                <div class="hero-buttons">
+                    <a href="#download" class="btn btn-primary">Baixar Agora</a>
+                    <a href="#features" class="btn btn-secondary">Conhecer Mais</a>
+                </div>
             </div>
-            <div class="hero-icon">
-                <i class="fas fa-mobile-alt"></i>
+            <div class="hero-phone">
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        <div class="phone-status-bar"></div>
+                        <div class="phone-content">
+                            <div class="app-preview"></div>
+                            <div class="app-preview"></div>
+                            <div class="app-preview"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Funcionalidades -->
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stat-card">
+                <h3>500+</h3>
+                <p>Membros Ativos</p>
+            </div>
+            <div class="stat-card">
+                <h3>100+</h3>
+                <p>Vídeos em HD</p>
+            </div>
+            <div class="stat-card">
+                <h3>50+</h3>
+                <p>Eventos por Ano</p>
+            </div>
+            <div class="stat-card">
+                <h3>24/7</h3>
+                <p>Disponível</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Premium -->
     <section id="features" class="features">
         <div class="container">
-            <h2>Funcionalidades do App</h2>
+            <div class="section-header">
+                <h2>Funcionalidades Incríveis</h2>
+                <p>Tudo que você precisa para acompanhar sua jornada espiritual</p>
+            </div>
             <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="feature-card premium">
+                    <div class="feature-icon-wrapper">
                         <i class="fas fa-video"></i>
                     </div>
                     <h3>Vídeos dos Pastores</h3>
-                    <p>Assista aos ensinamentos e mensagens dos pastores quando e onde quiser. Conteúdo sempre atualizado.</p>
+                    <p>Assista aos ensinamentos, mensagens e estudos bíblicos direto do seu celular. Acesso total ao conteúdo em HD sempre disponível.</p>
+                    <a href="#" class="feature-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="feature-card premium">
+                    <div class="feature-icon-wrapper">
                         <i class="fas fa-hands-praying"></i>
                     </div>
                     <h3>Pedidos de Oração</h3>
-                    <p>Compartilhe seus pedidos de oração com a comunidade e receba intercessão do corpo de Cristo.</p>
+                    <p>Compartilhe suas necessidades espirituais com a comunidade. Receba intercessão e apoio dos irmãos em tempo real.</p>
+                    <a href="#" class="feature-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="feature-card premium">
+                    <div class="feature-icon-wrapper">
                         <i class="fas fa-calendar-alt"></i>
                     </div>
                     <h3>Agenda de Eventos</h3>
-                    <p>Fique informado sobre todos os eventos, cultos e atividades da Igreja. Nunca perca um compromisso.</p>
+                    <p>Fique informado sobre cultos, retiros, conferências e atividades. Receba notificações de todos os eventos importantes.</p>
+                    <a href="#" class="feature-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="feature-card premium">
+                    <div class="feature-icon-wrapper">
                         <i class="fas fa-birthday-cake"></i>
                     </div>
                     <h3>Aniversariantes</h3>
-                    <p>Celebre os aniversários dos membros da comunidade. Compartilhe mensagens de carinho.</p>
+                    <p>Celebre os aniversários dos irmãos. Compartilhe mensagens de amor e cuidado com a comunidade.</p>
+                    <a href="#" class="feature-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="feature-card premium">
+                    <div class="feature-icon-wrapper">
                         <i class="fas fa-bell"></i>
                     </div>
                     <h3>Publicações</h3>
-                    <p>Receba notificações sobre novas publicações, notícias e comunicados importantes da Igreja.</p>
+                    <p>Receba notificações importantes, novidades e comunicados da Igreja. Nunca perca uma atualização relevante.</p>
+                    <a href="#" class="feature-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-money-bill-wave"></i>
+                <div class="feature-card premium highlight">
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-lock"></i>
                     </div>
-                    <h3>Financeiro (Servos)</h3>
-                    <p>Acesso exclusivo para servos da Igreja aos relatórios e informações financeiras.</p>
+                    <h3>Área Financeira</h3>
+                    <p>Acesso exclusivo para servos da Igreja. Acompanhe relatórios financeiros com segurança total.</p>
+                    <a href="#" class="feature-link">Saiba mais <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Sobre o Ministério Vida</h2>
+                    <div class="about-values">
+                        <div class="value-item">
+                            <h4><i class="fas fa-heart"></i> Nossa Missão</h4>
+                            <p>Proclamar o evangelho de Jesus Cristo, fazer discípulos e impactar vidas através da palavra de Deus.</p>
+                        </div>
+                        <div class="value-item">
+                            <h4><i class="fas fa-lightbulb"></i> Nossa Visão</h4>
+                            <p>Ser uma Igreja que ama, acolhe e transforma vidas pelo poder do Espírito Santo.</p>
+                        </div>
+                        <div class="value-item">
+                            <h4><i class="fas fa-gem"></i> Nossos Valores</h4>
+                            <p>Fé em Jesus, Comunhão genuína, Serviço desinteressado e Verdade Bíblica.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-church"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,75 +184,104 @@
     <!-- Download Section -->
     <section id="download" class="download">
         <div class="container">
-            <h2>Baixe o Aplicativo</h2>
-            <p class="download-subtitle">Disponível para Android - Conecte-se com a comunidade agora mesmo</p>
+            <div class="section-header">
+                <h2>Baixe o Aplicativo</h2>
+                <p>Disponível para Android - Transforme sua vida espiritual</p>
+            </div>
             
-            <div class="download-container">
+            <div class="download-wrapper">
                 <div class="download-card">
-                    <i class="fab fa-android"></i>
+                    <div class="os-icon">
+                        <i class="fab fa-android"></i>
+                    </div>
                     <h3>Android</h3>
-                    <p>Versão 1.0.0</p>
+                    <div class="version-info">
+                        <p class="version">Versão 1.0.0</p>
+                        <p class="size">25 MB</p>
+                    </div>
                     <a href="https://github.com/devjezreel/VidaAPP/releases/download/v1.0.0/VidaAPP.apk" class="btn btn-download" download>
                         <i class="fas fa-download"></i> Download APK
                     </a>
-                    <p class="size-info">Tamanho: ~25MB</p>
                 </div>
             </div>
 
-            <div class="installation-guide">
+            <div class="installation-steps">
                 <h3>Como Instalar?</h3>
-                <ol>
-                    <li>Clique em "Download APK" acima</li>
-                    <li>Vá para as configurações do seu Android</li>
-                    <li>Permita instalação de apps desconhecidos</li>
-                    <li>Abra o arquivo APK baixado</li>
-                    <li>Clique em "Instalar"</li>
-                    <li>Pronto! Seu app está instalado</li>
-                </ol>
+                <div class="steps-grid">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Download</h4>
+                        <p>Clique no botão de download acima</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Permissões</h4>
+                        <p>Vá em Segurança > Fontes desconhecidas</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>Instalar</h4>
+                        <p>Abra o arquivo APK e confirme</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>Pronto!</h4>
+                        <p>Comece a usar agora mesmo</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Informações da Igreja -->
-    <section class="info">
-        <div class="container">
-            <h2>Igreja Cristã Ministério Vida</h2>
-            <div class="info-content">
-                <p><strong>Missão:</strong> Proclamar o evangelho de Jesus Cristo, fazer discípulos e impactar vidas através da palavra de Deus.</p>
-                <p><strong>Visão:</strong> Ser uma Igreja que ama, acolhe e transforma vidas pelo poder do Espírito Santo.</p>
-                <p><strong>Valores:</strong> Fé, Comunhão, Serviço e Verdade Bíblica.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contato -->
+    <!-- Contact Section -->
     <section id="contato" class="contact">
         <div class="container">
-            <h2>Entre em Contato</h2>
-            <div class="contact-content">
+            <div class="section-header">
+                <h2>Entre em Contato</h2>
+                <p>Fale conosco para mais informações</p>
+            </div>
+            <div class="contact-wrapper">
                 <div class="contact-info">
                     <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
                         <div>
                             <h4>Endereço</h4>
-                            <p>Igreja Cristã Ministério Vida</p>
+                            <p>Igreja Cristã Ministério Vida<br>Sua Cidade, Estado</p>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
                         <div>
                             <h4>Email</h4>
                             <p><a href="mailto:contato@ministeriovida.com">contato@ministeriovida.com</a></p>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-phone"></i>
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
                         <div>
                             <h4>Telefone</h4>
                             <p><a href="tel:+5511999999999">(11) 99999-9999</a></p>
                         </div>
                     </div>
                 </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Seu Nome" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Seu Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Sua Mensagem" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                </form>
             </div>
         </div>
     </section>
@@ -172,8 +289,32 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 Igreja Cristã Ministério Vida. Todos os direitos reservados.</p>
-            <p>Desenvolvido com <i class="fas fa-heart"></i> para a comunidade</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Ministério Vida</h4>
+                    <p>Transformando vidas através do evangelho de Jesus Cristo.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#inicio">Início</a></li>
+                        <li><a href="#features">Recursos</a></li>
+                        <li><a href="#download">Download</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Igreja Cristã Ministério Vida. Todos os direitos reservados.</p>
+                <p>Desenvolvido com <i class="fas fa-heart"></i> para a comunidade</p>
+            </div>
         </div>
     </footer>
 
