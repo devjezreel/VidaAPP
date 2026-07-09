@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material3.*
@@ -16,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.vidaapp.EventEntity
+import com.example.vidaapp.model.EventEntity // Import corrigido
 
 @Composable
 fun EventsScreen(
@@ -37,6 +36,7 @@ fun EventsScreen(
             if (isAdmin) {
                 Button(onClick = { showAddDialog = true }) {
                     Icon(Icons.Default.Add, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text("Novo")
                 }
             }

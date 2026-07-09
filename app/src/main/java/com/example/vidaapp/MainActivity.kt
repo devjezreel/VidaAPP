@@ -1,6 +1,7 @@
 package com.example.vidaapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,9 +17,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.vidaapp.model.UiState
+import com.example.vidaapp.model.*
 import com.example.vidaapp.ui.*
 import com.example.vidaapp.ui.theme.VidaAPPTheme
 
@@ -29,14 +36,77 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VidaAPPTheme {
-                ChurchApp()
+                MainNavigation()
             }
         }
     }
 }
 
 @Composable
-fun ChurchApp(mainViewModel: MainViewModel = viewModel()) {
+fun MainNavigation(mainViewModel: MainViewModel = viewModel()) {
+    val navController = rememberNavController()
+    val authState by mainViewModel.authState.collectAsState()
+    val context = LocalContext.current
+
+    // Reação automática ao estado de login
+    LaunchedEffect(authState) {
+        when (authState) {
+            is UiState.Success -> {
+                navController.navigate("app") {
+                    popUpTo("login") { inclusive = true }
+                }
+            }
+            is UiState.Error -> {
+                Toast.makeText(context, (authState as UiState.Error).message, Toast.LENGTH_SHORT).show()
+                mainViewModel.resetAuthState()
+            }
+            else -> {}
+        }
+    }
+
+    NavHost(navController = navController, startDestination = "welcome") {
+        composable("welcome") {
+            WelcomeScreen(
+                onEnterClick = { navController.navigate("login") },
+                onAdminClick = { navController.navigate("login") }
+            )
+        }
+        composable("login") {
+            Box(modifier = Modifier.fillMaxSize()) {
+                LoginScreen(
+                    isAdminLogin = false,
+                    onLoginClick = { cpf, pass -> mainViewModel.login(cpf, pass) },
+                    onRegisterClick = { navController.navigate("register") },
+                    errorMessage = null 
+                )
+                if (authState is UiState.Loading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+            }
+        }
+        composable("register") {
+            RegistrationScreen(
+                isAdminUser = false,
+                onSaveMember = { member ->
+                    mainViewModel.saveMember(member) {
+                        navController.popBackStack()
+                    }
+                }
+            )
+        }
+        composable("app") {
+            ChurchAppContent(mainViewModel) {
+                mainViewModel.logout()
+                navController.navigate("welcome") {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ChurchAppContent(mainViewModel: MainViewModel, onLogout: () -> Unit) {
     val membersList by mainViewModel.members.collectAsState()
     val contentsList by mainViewModel.contents.collectAsState()
     val prayersList by mainViewModel.prayers.collectAsState()
@@ -44,130 +114,95 @@ fun ChurchApp(mainViewModel: MainViewModel = viewModel()) {
     val eventsList by mainViewModel.events.collectAsState()
     val birthdayList by mainViewModel.birthdayMembers.collectAsState()
     
-    var screenState by rememberSaveable { mutableStateOf(ScreenState.WELCOME) }
-    var isAdminLoginAttempt by rememberSaveable { mutableStateOf(false) }
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
-    
     var selectedCountry by rememberSaveable { mutableStateOf("Brasil") }
     var selectedRegion by rememberSaveable { mutableStateOf("Brasil - Sede") }
 
     val loggedUser = mainViewModel.loggedUser
     val isUserAdmin = loggedUser?.isAdmin == true
 
-    when (screenState) {
-        ScreenState.WELCOME -> {
-            WelcomeScreen(
-                onEnterClick = { isAdminLoginAttempt = false; screenState = ScreenState.LOGIN },
-                onAdminClick = { isAdminLoginAttempt = true; screenState = ScreenState.LOGIN }
-            )
-        }
-
-        ScreenState.LOGIN -> {
-            LoginScreen(
-                isAdminLogin = isAdminLoginAttempt,
-                onLoginClick = { cpf, password ->
-                    mainViewModel.login(cpf, password) { success, _ ->
-                        if (success) {
-                            screenState = ScreenState.MAIN_APP
-                            currentDestination = if (mainViewModel.loggedUser?.isAdmin == true) AppDestinations.MEMBERS else AppDestinations.HOME
-                        }
-                    }
-                },
-                onRegisterClick = { screenState = ScreenState.REGISTER },
-                errorMessage = mainViewModel.loginError
-            )
-        }
-
-        ScreenState.REGISTER -> {
-            RegistrationScreen(
-                isAdminUser = false, 
-                onSaveMember = { member ->
-                    mainViewModel.saveMember(member.copy(isAdmin = false)) { screenState = ScreenState.LOGIN }
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            AppDestinations.entries.forEach { destination ->
+                val shouldShow = when (destination) {
+                    AppDestinations.HOME, AppDestinations.CONTENT, AppDestinations.PRAYERS, AppDestinations.EVENTS, AppDestinations.BIRTHDAYS -> true
+                    AppDestinations.REGISTER, AppDestinations.MEMBERS, AppDestinations.FINANCIAL -> isUserAdmin
                 }
-            )
-        }
-
-        ScreenState.MAIN_APP -> {
-            NavigationSuiteScaffold(
-                navigationSuiteItems = {
-                    AppDestinations.entries.forEach { destination ->
-                        val shouldShow = when (destination) {
-                            AppDestinations.HOME, AppDestinations.CONTENT, AppDestinations.PRAYERS, AppDestinations.EVENTS, AppDestinations.BIRTHDAYS -> true
-                            AppDestinations.REGISTER, AppDestinations.MEMBERS, AppDestinations.FINANCIAL -> isUserAdmin
+                if (shouldShow) {
+                    item(
+                        icon = { Icon(destination.icon, contentDescription = destination.label) },
+                        label = { Text(destination.label) },
+                        selected = destination == currentDestination,
+                        onClick = { 
+                            if (destination != AppDestinations.REGISTER) mainViewModel.setEditMember(null)
+                            currentDestination = destination 
                         }
-                        if (shouldShow) {
-                            item(
-                                icon = { Icon(destination.icon, contentDescription = destination.label) },
-                                label = { Text(destination.label) },
-                                selected = destination == currentDestination,
-                                onClick = { 
-                                    if (destination != AppDestinations.REGISTER) mainViewModel.setEditMember(null)
-                                    currentDestination = destination 
-                                }
-                            )
-                        }
-                    }
+                    )
                 }
-            ) {
-                Scaffold(
-                    topBar = {
-                        val showSelector = isUserAdmin && (
-                            currentDestination == AppDestinations.FINANCIAL || 
-                            currentDestination == AppDestinations.MEMBERS ||
-                            currentDestination == AppDestinations.EVENTS
-                        )
-                        if (showSelector) {
-                            CountrySelector(
-                                selectedCountry = selectedCountry,
-                                onCountryChange = { country ->
-                                    selectedCountry = country
-                                    selectedRegion = if (country == "Portugal") "Portugal" else "Brasil - Sede"
-                                },
-                                selectedRegion = selectedRegion,
-                                onRegionChange = { selectedRegion = it }
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    Column(modifier = Modifier.padding(innerPadding)) {
-                        when (currentDestination) {
-                            AppDestinations.HOME -> HomeScreen(user = loggedUser, onLogout = { mainViewModel.logout(); screenState = ScreenState.WELCOME })
-                            AppDestinations.CONTENT -> ContentScreen(
-                                isAdmin = isUserAdmin, 
-                                contents = contentsList, 
-                                onSaveContent = { t, d, ty, u -> mainViewModel.saveContent(t, d, ty, u) }, 
-                                onDeleteContent = { mainViewModel.deleteContent(it) },
-                                mainViewModel = mainViewModel
-                            )
-                            AppDestinations.PRAYERS -> PrayersScreen(isAdmin = isUserAdmin, prayers = prayersList, onSendPrayer = { mainViewModel.sendPrayerRequest(it) }, onDeletePrayer = { mainViewModel.deletePrayer(it) })
-                            
-                            AppDestinations.EVENTS -> EventsScreen(
-                                isAdmin = isUserAdmin, 
-                                events = eventsList.filter { it.location == selectedRegion || it.location == "Geral" }, 
-                                onSaveEvent = { t, d, dt, ti, loc -> mainViewModel.saveEvent(t, d, dt, ti, selectedRegion) }, 
-                                onDeleteEvent = { mainViewModel.deleteEvent(it) }
-                            )
-                            
-                            AppDestinations.BIRTHDAYS -> BirthdayScreen(
-                                members = birthdayList.filter { it.location == selectedRegion }
-                            )
-                            
-                            AppDestinations.REGISTER -> RegistrationScreen(memberToEdit = mainViewModel.memberToEdit, isAdminUser = isUserAdmin, onSaveMember = { mainViewModel.saveMember(it) { currentDestination = AppDestinations.MEMBERS } })
-                            
-                            AppDestinations.MEMBERS -> MembersListScreen(
-                                members = membersList.filter { it.location == selectedRegion }, 
-                                onEditMember = { mainViewModel.setEditMember(it); currentDestination = AppDestinations.REGISTER }, 
-                                onDeleteMember = { mainViewModel.deleteMember(it) }
-                            )
-                            
-                            AppDestinations.FINANCIAL -> FinancialScreen(
-                                entries = financialEntries.filter { it.location == selectedRegion },
-                                onAddEntry = { d, a, c, e -> mainViewModel.addFinancialEntry(d, a, c, e, selectedRegion) },
-                                onDeleteEntry = { mainViewModel.deleteFinancialEntry(it) }
-                            )
-                        }
-                    }
+            }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                val showSelector = isUserAdmin && (
+                    currentDestination == AppDestinations.FINANCIAL || 
+                    currentDestination == AppDestinations.MEMBERS ||
+                    currentDestination == AppDestinations.EVENTS
+                )
+                if (showSelector) {
+                    CountrySelector(
+                        selectedCountry = selectedCountry,
+                        onCountryChange = { country ->
+                            selectedCountry = country
+                            selectedRegion = if (country == "Portugal") "Portugal" else "Brasil - Sede"
+                        },
+                        selectedRegion = selectedRegion,
+                        onRegionChange = { selectedRegion = it }
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxSize()
+        ) { innerPadding ->
+            Column(modifier = Modifier.padding(innerPadding)) {
+                when (currentDestination) {
+                    AppDestinations.HOME -> HomeScreen(user = loggedUser, onLogout = onLogout)
+                    AppDestinations.CONTENT -> ContentScreen(
+                        isAdmin = isUserAdmin, 
+                        contents = contentsList, 
+                        onSaveContent = { t, d, ty, u -> mainViewModel.saveContent(t, d, ty, u) }, 
+                        onDeleteContent = { mainViewModel.deleteContent(it) },
+                        mainViewModel = mainViewModel
+                    )
+                    AppDestinations.PRAYERS -> PrayersScreen(
+                        isAdmin = isUserAdmin, 
+                        prayers = prayersList, 
+                        onSendPrayer = { mainViewModel.sendPrayerRequest(it) }, 
+                        onDeletePrayer = { mainViewModel.deletePrayer(it) }
+                    )
+                    AppDestinations.EVENTS -> EventsScreen(
+                        isAdmin = isUserAdmin, 
+                        events = eventsList.filter { it.location == selectedRegion || it.location == "Geral" }, 
+                        onSaveEvent = { t, d, dt, ti, loc -> mainViewModel.saveEvent(t, d, dt, ti, selectedRegion) }, 
+                        onDeleteEvent = { mainViewModel.deleteEvent(it) }
+                    )
+                    AppDestinations.BIRTHDAYS -> BirthdayScreen(
+                        members = birthdayList.filter { it.location == selectedRegion }
+                    )
+                    AppDestinations.REGISTER -> RegistrationScreen(
+                        memberToEdit = mainViewModel.memberToEdit, 
+                        isAdminUser = isUserAdmin, 
+                        onSaveMember = { mainViewModel.saveMember(it) { currentDestination = AppDestinations.MEMBERS } }
+                    )
+                    AppDestinations.MEMBERS -> MembersListScreen(
+                        members = membersList.filter { it.location == selectedRegion }, 
+                        onEditMember = { mainViewModel.setEditMember(it); currentDestination = AppDestinations.REGISTER }, 
+                        onDeleteMember = { mainViewModel.deleteMember(it) }
+                    )
+                    AppDestinations.FINANCIAL -> FinancialScreen(
+                        entries = financialEntries.filter { it.location == selectedRegion },
+                        onAddEntry = { d, a, c, e, loc -> mainViewModel.addFinancialEntry(d, a, c, e, loc) },
+                        onDeleteEntry = { mainViewModel.deleteFinancialEntry(it) }
+                    )
                 }
             }
         }
@@ -205,8 +240,6 @@ fun CountrySelector(
         }
     }
 }
-
-enum class ScreenState { WELCOME, LOGIN, REGISTER, MAIN_APP }
 
 enum class AppDestinations(val label: String, val icon: ImageVector) {
     HOME("Início", Icons.Default.Home),

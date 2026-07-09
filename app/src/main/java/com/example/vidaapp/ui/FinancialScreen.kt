@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,34 +20,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.vidaapp.FinancialEntryEntity
+import com.example.vidaapp.model.FinancialEntryEntity // Import corrigido
 import java.text.SimpleDateFormat
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FinancialScreen(
     entries: List<FinancialEntryEntity>,
-    onAddEntry: (String, Double, String, Boolean) -> Unit,
+    onAddEntry: (String, Double, String, Boolean, String) -> Unit, // Adicionado parâmetro location
     onDeleteEntry: (FinancialEntryEntity) -> Unit
 ) {
     var showAddDialog by remember { mutableStateOf(false) }
     
-    // Cálculos de Tempo
     val calendar = Calendar.getInstance()
-    val now = calendar.timeInMillis
-    
-    // Início do dia
     calendar.set(Calendar.HOUR_OF_DAY, 0); calendar.set(Calendar.MINUTE, 0)
     val startOfDay = calendar.timeInMillis
-    
-    // Início da semana
     calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
     val startOfWeek = calendar.timeInMillis
-    
-    // Início do mês
     calendar.set(Calendar.DAY_OF_MONTH, 1)
     val startOfMonth = calendar.timeInMillis
 
+    // Funções de soma corrigidas para evitar ambiguidade
     fun sumEntries(list: List<FinancialEntryEntity>) = list.filter { !it.isExpense }.sumOf { it.amount }
     fun sumExpenses(list: List<FinancialEntryEntity>) = list.filter { it.isExpense }.sumOf { it.amount }
 
@@ -58,10 +51,8 @@ fun FinancialScreen(
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(text = "Fluxo de Caixa (ADM)", style = MaterialTheme.typography.headlineSmall)
-        
         Spacer(modifier = Modifier.height(16.dp))
 
-        // CARDS DE RESUMO
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SummaryCard("Hoje", sumEntries(todayEntries) - sumExpenses(todayEntries), Modifier.weight(1f))
             SummaryCard("Semana", sumEntries(weekEntries) - sumExpenses(weekEntries), Modifier.weight(1f))
@@ -70,10 +61,7 @@ fun FinancialScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-        ) {
+        Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(text = "Saldo Geral", style = MaterialTheme.typography.labelMedium)
@@ -88,7 +76,6 @@ fun FinancialScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
         Text(text = "Histórico de Lançamentos", style = MaterialTheme.typography.titleMedium)
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(entries) { entry ->
@@ -102,7 +89,7 @@ fun FinancialScreen(
         AddFinancialDialog(
             onDismiss = { showAddDialog = false },
             onConfirm = { desc, value, cat, isExp ->
-                onAddEntry(desc, value, cat, isExp)
+                onAddEntry(desc, value, cat, isExp, "Brasil - Sede")
                 showAddDialog = false
             }
         )
@@ -146,6 +133,7 @@ fun FinancialEntryItem(entry: FinancialEntryEntity, onDelete: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFinancialDialog(onDismiss: () -> Unit, onConfirm: (String, Double, String, Boolean) -> Unit) {
     var desc by remember { mutableStateOf("") }
@@ -168,7 +156,6 @@ fun AddFinancialDialog(onDismiss: () -> Unit, onConfirm: (String, Double, String
                 OutlinedTextField(value = value, onValueChange = { value = it }, label = { Text("Valor R$") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Categoria:", style = MaterialTheme.typography.labelMedium)
-                // Categorias rápidas
                 val cats = if (isExpense) listOf("Aluguel", "Luz/Água", "Missões", "Manutenção", "Outros") else listOf("Dízimo", "Oferta", "Doação", "Cantina")
                 Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     cats.take(3).forEach { c ->
@@ -181,6 +168,9 @@ fun AddFinancialDialog(onDismiss: () -> Unit, onConfirm: (String, Double, String
             Button(onClick = { onConfirm(desc, value.replace(",",".").toDoubleOrNull() ?: 0.0, cat, isExpense) }, enabled = desc.isNotBlank() && value.isNotBlank()) {
                 Text("Confirmar")
             }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancelar") }
         }
     )
 }
