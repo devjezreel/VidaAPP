@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VidaAPP - Baixar</title>
+    <title>VidaAPP - Ministerio Vida</title>
     <style>
         * {
             margin: 0;
@@ -23,54 +23,52 @@
         
         .container {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 50px 40px;
-            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
             text-align: center;
-            animation: slideIn 0.5s ease-out;
         }
         
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .logo {
-            width: 100px;
-            height: 100px;
+        .logo-tree {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            font-size: 50px;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        svg {
+            width: 100px;
+            height: 100px;
         }
         
         h1 {
             color: #333;
-            font-size: 32px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            font-size: 2.5em;
         }
         
-        .version {
-            color: #999;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        
-        p {
+        .subtitle {
             color: #666;
-            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        .description {
+            color: #555;
             margin-bottom: 40px;
-            font-size: 16px;
+            line-height: 1.6;
+            font-size: 1em;
+        }
+        
+        .download-section {
+            margin: 40px 0;
         }
         
         .download-btn {
@@ -80,114 +78,151 @@
             padding: 15px 40px;
             border-radius: 50px;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 1.1em;
             font-weight: bold;
             transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-            border: none;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
             cursor: pointer;
+            border: none;
+            display: inline-block;
+            margin: 10px;
         }
         
         .download-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
         }
-        
-        .download-btn:active {
-            transform: translateY(0);
+
+        .secondary-btn {
+            background: #f0f4ff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .secondary-btn:hover {
+            background: #667eea;
+            color: white;
         }
         
         .info {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #eee;
-            color: #999;
-            font-size: 13px;
-        }
-        
-        .info-item {
-            margin: 10px 0;
-        }
-        
-        .features {
-            text-align: left;
-            background: #f9f9f9;
+            background: #f0f4ff;
             padding: 20px;
             border-radius: 10px;
-            margin: 30px 0;
-            color: #666;
-        }
-        
-        .features h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        
-        .features ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .features li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .features li:last-child {
-            border-bottom: none;
-        }
-        
-        .features li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .footer {
             margin-top: 30px;
-            font-size: 12px;
-            color: #ccc;
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        .info-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .github-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .github-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">📱</div>
-        
-        <h1>VidaAPP</h1>
-        <div class="version">v1.0.0.0</div>
-        
-        <p>Seu aplicativo mobile completo para uma melhor experiência digital.</p>
-        
-        <div class="features">
-            <h3>Recursos</h3>
-            <ul>
-                <li>Interface moderna e intuitiva</li>
-                <li>Performance otimizada</li>
-                <li>Segurança garantida</li>
-            </ul>
+        <div class="logo-tree">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220">
+                <!-- Livro - lado esquerdo (cinza escuro) -->
+                <path fill="#4A4A4A" d="M 30,60 L 70,60 L 70,140 Q 50,150 30,140 Z" />
+                
+                <!-- Livro - lado direito (cinza escuro) -->
+                <path fill="#4A4A4A" d="M 130,60 L 170,60 L 170,140 Q 150,150 130,140 Z" />
+                
+                <!-- Livro - costas (cinza mais escuro) -->
+                <path fill="#3A3A3A" d="M 70,60 L 130,60 L 130,140 L 70,140 Z" />
+                
+                <!-- Livro - base/sombra -->
+                <path fill="#2A2A2A" d="M 20,140 Q 50,160 100,160 Q 150,160 180,140 L 175,145 Q 100,165 25,145 Z" />
+                
+                <!-- Onda da base -->
+                <path fill="#3A3A3A" d="M 25,150 Q 100,175 175,150" />
+                
+                <!-- Tronco da árvore -->
+                <path fill="#5C4033" d="M 95,80 L 105,80 L 105,110 L 95,110 Z" />
+                
+                <!-- Galhos do tronco -->
+                <path fill="#6D4C41" d="M 95,90 L 85,95" />
+                <path fill="#6D4C41" d="M 105,90 L 115,95" />
+                
+                <!-- Folhas - Topo (verde claro) -->
+                <ellipse cx="100" cy="70" rx="6" ry="8" fill="#66BB6A" />
+                
+                <!-- Folhas - camada superior esquerda -->
+                <ellipse cx="85" cy="75" rx="7" ry="10" fill="#81C784" />
+                <ellipse cx="78" cy="85" rx="6" ry="9" fill="#66BB6A" />
+                
+                <!-- Folhas - camada superior direita -->
+                <ellipse cx="115" cy="75" rx="7" ry="10" fill="#81C784" />
+                <ellipse cx="122" cy="85" rx="6" ry="9" fill="#66BB6A" />
+                
+                <!-- Folhas - camada média esquerda (verde médio) -->
+                <ellipse cx="75" cy="95" rx="8" ry="11" fill="#558B2F" />
+                <ellipse cx="70" cy="105" rx="7" ry="10" fill="#7CB342" />
+                
+                <!-- Folhas - camada média direita (verde médio) -->
+                <ellipse cx="125" cy="95" rx="8" ry="11" fill="#558B2F" />
+                <ellipse cx="130" cy="105" rx="7" ry="10" fill="#7CB342" />
+                
+                <!-- Folhas - camada inferior esquerda -->
+                <ellipse cx="80" cy="115" rx="9" ry="12" fill="#689F38" />
+                <ellipse cx="72" cy="120" rx="8" ry="10" fill="#7CB342" />
+                
+                <!-- Folhas - camada inferior direita -->
+                <ellipse cx="120" cy="115" rx="9" ry="12" fill="#689F38" />
+                <ellipse cx="128" cy="120" rx="8" ry="10" fill="#7CB342" />
+                
+                <!-- Pequenas folhas decorativas -->
+                <ellipse cx="88" cy="88" rx="4" ry="6" fill="#9CCC65" />
+                <ellipse cx="112" cy="88" rx="4" ry="6" fill="#9CCC65" />
+                <ellipse cx="82" cy="100" rx="4" ry="5" fill="#AED581" />
+                <ellipse cx="118" cy="100" rx="4" ry="5" fill="#AED581" />
+            </svg>
         </div>
         
-        <a href="https://github.com/devjezreel/VidaAPP/releases/download/VidaAPP/vidaapp.apk" class="download-btn">
-            ⬇️ Baixar APK
-        </a>
+        <h1>📱 VidaAPP</h1>
+        <p class="subtitle">Ministerio Vida</p>
+        
+        <p class="description">
+            Bem-vindo! Baixe agora o aplicativo VidaAPP e acompanhe os eventos e informações do nosso ministério.
+        </p>
+        
+        <div class="download-section">
+            <a href="download.html" class="download-btn">⬇️ Baixar APK</a>
+            <a href="https://github.com/devjezreel/VidaAPP" class="download-btn secondary-btn">🔗 Ver no GitHub</a>
+        </div>
         
         <div class="info">
-            <div class="info-item">📦 Tamanho: Variável conforme build</div>
-            <div class="info-item">🤖 Android: Compatível</div>
-            <div class="info-item">✨ Atualizado: 11 de Julho, 2026</div>
-            <div class="info-item">
-                <a href="https://github.com/devjezreel/VidaAPP" style="color: #667eea; text-decoration: none;">
-                    Ver no GitHub →
-                </a>
-            </div>
+            <div class="info-title">ℹ️ Instruções de Instalação</div>
+            <p>1. Clique em "Baixar APK"</p>
+            <p>2. Abra o arquivo no seu dispositivo Android</p>
+            <p>3. Siga as instruções de instalação</p>
+            <p>4. Pronto! O app está instalado e pronto para usar</p>
         </div>
         
-        <div class="footer">
-            © 2026 VidaAPP. Todos os direitos reservados.
-        </div>
+        <footer>
+            <p>© 2026 Ministerio Vida - Todos os direitos reservados</p>
+            <p style="margin-top: 10px;"><a href="https://github.com/devjezreel/VidaAPP" class="github-link">devjezreel/VidaAPP</a></p>
+        </footer>
     </div>
 </body>
 </html>
