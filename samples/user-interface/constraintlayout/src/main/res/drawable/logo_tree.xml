@@ -1,0 +1,173 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="220dp"
+    android:viewportWidth="200"
+    android:viewportHeight="220">
+
+    <!-- Livro - lado esquerdo (cinza escuro) -->
+    <path
+        android:fillColor="#4A4A4A"
+        android:pathData="M 30,60 L 70,60 L 70,140 Q 50,150 30,140 Z" />
+
+    <!-- Livro - lado direito (cinza escuro) -->
+    <path
+        android:fillColor="#4A4A4A"
+        android:pathData="M 130,60 L 170,60 L 170,140 Q 150,150 130,140 Z" />
+
+    <!-- Livro - costas (cinza mais escuro) -->
+    <path
+        android:fillColor="#3A3A3A"
+        android:pathData="M 70,60 L 130,60 L 130,140 L 70,140 Z" />
+
+    <!-- Livro - base/sombra -->
+    <path
+        android:fillColor="#2A2A2A"
+        android:pathData="M 20,140 Q 50,160 100,160 Q 150,160 180,140 L 175,145 Q 100,165 25,145 Z" />
+
+    <!-- Onda da base -->
+    <path
+        android:fillColor="#3A3A3A"
+        android:pathData="M 25,150 Q 100,175 175,150" />
+
+    <!-- Tronco da árvore -->
+    <path
+        android:fillColor="#5C4033"
+        android:pathData="M 95,80 L 105,80 L 105,110 L 95,110 Z" />
+
+    <!-- Galhos do tronco -->
+    <path
+        android:fillColor="#6D4C41"
+        android:pathData="M 95,90 L 85,95" />
+
+    <path
+        android:fillColor="#6D4C41"
+        android:pathData="M 105,90 L 115,95" />
+
+    <!-- Folhas - Topo (verde claro) -->
+    <ellipse
+        android:cx="100"
+        android:cy="70"
+        android:rx="6"
+        android:ry="8"
+        android:fillColor="#66BB6A" />
+
+    <!-- Folhas - camada superior esquerda -->
+    <ellipse
+        android:cx="85"
+        android:cy="75"
+        android:rx="7"
+        android:ry="10"
+        android:fillColor="#81C784" />
+
+    <ellipse
+        android:cx="78"
+        android:cy="85"
+        android:rx="6"
+        android:ry="9"
+        android:fillColor="#66BB6A" />
+
+    <!-- Folhas - camada superior direita -->
+    <ellipse
+        android:cx="115"
+        android:cy="75"
+        android:rx="7"
+        android:ry="10"
+        android:fillColor="#81C784" />
+
+    <ellipse
+        android:cx="122"
+        android:cy="85"
+        android:rx="6"
+        android:ry="9"
+        android:fillColor="#66BB6A" />
+
+    <!-- Folhas - camada média esquerda (verde médio) -->
+    <ellipse
+        android:cx="75"
+        android:cy="95"
+        android:rx="8"
+        android:ry="11"
+        android:fillColor="#558B2F" />
+
+    <ellipse
+        android:cx="70"
+        android:cy="105"
+        android:rx="7"
+        android:ry="10"
+        android:fillColor="#7CB342" />
+
+    <!-- Folhas - camada média direita (verde médio) -->
+    <ellipse
+        android:cx="125"
+        android:cy="95"
+        android:rx="8"
+        android:ry="11"
+        android:fillColor="#558B2F" />
+
+    <ellipse
+        android:cx="130"
+        android:cy="105"
+        android:rx="7"
+        android:ry="10"
+        android:fillColor="#7CB342" />
+
+    <!-- Folhas - camada inferior esquerda -->
+    <ellipse
+        android:cx="80"
+        android:cy="115"
+        android:rx="9"
+        android:ry="12"
+        android:fillColor="#689F38" />
+
+    <ellipse
+        android:cx="72"
+        android:cy="120"
+        android:rx="8"
+        android:ry="10"
+        android:fillColor="#7CB342" />
+
+    <!-- Folhas - camada inferior direita -->
+    <ellipse
+        android:cx="120"
+        android:cy="115"
+        android:rx="9"
+        android:ry="12"
+        android:fillColor="#689F38" />
+
+    <ellipse
+        android:cx="128"
+        android:cy="120"
+        android:rx="8"
+        android:ry="10"
+        android:fillColor="#7CB342" />
+
+    <!-- Pequenas folhas decorativas -->
+    <ellipse
+        android:cx="88"
+        android:cy="88"
+        android:rx="4"
+        android:ry="6"
+        android:fillColor="#9CCC65" />
+
+    <ellipse
+        android:cx="112"
+        android:cy="88"
+        android:rx="4"
+        android:ry="6"
+        android:fillColor="#9CCC65" />
+
+    <ellipse
+        android:cx="82"
+        android:cy="100"
+        android:rx="4"
+        android:ry="5"
+        android:fillColor="#AED581" />
+
+    <ellipse
+        android:cx="118"
+        android:cy="100"
+        android:rx="4"
+        android:ry="5"
+        android:fillColor="#AED581" />
+
+</vector>
