@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -65,7 +64,6 @@ fun RegistrationScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Logo de fundo (Identidade Vida APP)
         Image(
             painter = painterResource(id = R.drawable.logo_igreja),
             contentDescription = null,
@@ -83,7 +81,6 @@ fun RegistrationScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Logo no topo
             Image(
                 painter = painterResource(id = R.drawable.logo_igreja),
                 contentDescription = "Logo",
@@ -102,7 +99,6 @@ fun RegistrationScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Formulário em um Card para destacar do fundo
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
@@ -120,10 +116,9 @@ fun RegistrationScreen(
                         value = cpf,
                         onValueChange = { input ->
                             if (input.length <= 11) {
-                                val numbers = input.filter { it.isDigit() }
-                                cpf = numbers
-                                // Uso de comparação explícita para evitar o erro do operador '!'
-                                cpfError = numbers.length == 11 && isCpfValid(numbers) == false
+                                val numbersOnly = input.filter { it.isDigit() }
+                                cpf = numbersOnly
+                                cpfError = numbersOnly.length == 11 && isCpfValid(numbersOnly) == false
                             }
                         },
                         label = { Text("CPF (apenas números)") },
