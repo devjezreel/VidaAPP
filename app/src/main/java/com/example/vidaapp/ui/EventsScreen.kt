@@ -1,5 +1,6 @@
 package com.example.vidaapp.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,11 +12,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.vidaapp.model.EventEntity // Import corrigido
+import com.example.vidaapp.model.EventEntity
+import com.example.vidaapp.R
 
 @Composable
 fun EventsScreen(
@@ -26,32 +32,60 @@ fun EventsScreen(
 ) {
     var showAddDialog by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Agenda de Eventos", style = MaterialTheme.typography.headlineSmall)
-            if (isAdmin) {
-                Button(onClick = { showAddDialog = true }) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Novo")
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Logo de fundo (Padrão Vida APP)
+        Image(
+            painter = painterResource(id = R.drawable.logo_igreja),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(10.dp)
+                .alpha(0.05f),
+            contentScale = ContentScale.Fit
+        )
+
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            // Logo no topo
+            Image(
+                painter = painterResource(id = R.drawable.logo_igreja),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(bottom = 16.dp),
+                contentScale = ContentScale.Fit
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Agenda de Eventos", 
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                if (isAdmin) {
+                    Button(onClick = { showAddDialog = true }) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                        Text("Novo")
+                    }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        if (events.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Nenhum evento programado.", color = Color.Gray)
-            }
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(events) { event ->
-                    EventItem(event, isAdmin, onDelete = { onDeleteEvent(event) })
+            if (events.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Nenhum evento programado.", color = Color.Gray)
+                }
+            } else {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(events) { event ->
+                        EventItem(event, isAdmin, onDelete = { onDeleteEvent(event) })
+                    }
                 }
             }
         }
@@ -72,7 +106,8 @@ fun EventsScreen(
 fun EventItem(event: EventEntity, isAdmin: Boolean, onDelete: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)),
+        elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -89,8 +124,8 @@ fun EventItem(event: EventEntity, isAdmin: Boolean, onDelete: () -> Unit) {
             Text(text = event.description, style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(text = "📅 ${event.date}", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-                Text(text = "🕒 ${event.time}", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                Text(text = "📅 ${event.date}", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                Text(text = "🕒 ${event.time}", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
             }
             Text(text = "📍 ${event.location}", fontSize = 12.sp, color = Color.Gray)
         }

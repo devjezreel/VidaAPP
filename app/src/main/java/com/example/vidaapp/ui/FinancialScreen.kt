@@ -1,5 +1,6 @@
 package com.example.vidaapp.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,12 +16,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.vidaapp.model.FinancialEntryEntity // Import corrigido
+import com.example.vidaapp.model.FinancialEntryEntity
+import com.example.vidaapp.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +34,7 @@ import java.util.*
 @Composable
 fun FinancialScreen(
     entries: List<FinancialEntryEntity>,
-    onAddEntry: (String, Double, String, Boolean, String) -> Unit, // Adicionado parâmetro location
+    onAddEntry: (String, Double, String, Boolean, String) -> Unit,
     onDeleteEntry: (FinancialEntryEntity) -> Unit
 ) {
     var showAddDialog by remember { mutableStateOf(false) }
@@ -41,7 +47,6 @@ fun FinancialScreen(
     calendar.set(Calendar.DAY_OF_MONTH, 1)
     val startOfMonth = calendar.timeInMillis
 
-    // Funções de soma corrigidas para evitar ambiguidade
     fun sumEntries(list: List<FinancialEntryEntity>) = list.filter { !it.isExpense }.sumOf { it.amount }
     fun sumExpenses(list: List<FinancialEntryEntity>) = list.filter { it.isExpense }.sumOf { it.amount }
 
@@ -49,38 +54,72 @@ fun FinancialScreen(
     val weekEntries = entries.filter { it.timestamp >= startOfWeek }
     val monthEntries = entries.filter { it.timestamp >= startOfMonth }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "Fluxo de Caixa (ADM)", style = MaterialTheme.typography.headlineSmall)
-        Spacer(modifier = Modifier.height(16.dp))
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Logo de fundo (Padrão Vida APP)
+        Image(
+            painter = painterResource(id = R.drawable.logo_igreja),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(10.dp)
+                .alpha(0.05f),
+            contentScale = ContentScale.Fit
+        )
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            SummaryCard("Hoje", sumEntries(todayEntries) - sumExpenses(todayEntries), Modifier.weight(1f))
-            SummaryCard("Semana", sumEntries(weekEntries) - sumExpenses(weekEntries), Modifier.weight(1f))
-            SummaryCard("Mês", sumEntries(monthEntries) - sumExpenses(monthEntries), Modifier.weight(1f))
-        }
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            // Logo no topo
+            Image(
+                painter = painterResource(id = R.drawable.logo_igreja),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(bottom = 16.dp),
+                contentScale = ContentScale.Fit
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Fluxo de Caixa (ADM)", 
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Card(modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
-            Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(text = "Saldo Geral", style = MaterialTheme.typography.labelMedium)
-                    Text(text = "R$ ${String.format("%.2f", sumEntries(entries) - sumExpenses(entries))}", 
-                        style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-                }
-                Button(onClick = { showAddDialog = true }) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                    Text("Lançar")
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                SummaryCard("Hoje", sumEntries(todayEntries) - sumExpenses(todayEntries), Modifier.weight(1f))
+                SummaryCard("Semana", sumEntries(weekEntries) - sumExpenses(weekEntries), Modifier.weight(1f))
+                SummaryCard("Mês", sumEntries(monthEntries) - sumExpenses(monthEntries), Modifier.weight(1f))
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(), 
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f))
+            ) {
+                Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(text = "Saldo Geral", style = MaterialTheme.typography.labelMedium)
+                        Text(text = "R$ ${String.format("%.2f", sumEntries(entries) - sumExpenses(entries))}", 
+                            style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                    }
+                    Button(onClick = { showAddDialog = true }) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                        Text("Lançar")
+                    }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Histórico de Lançamentos", style = MaterialTheme.typography.titleMedium)
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(entries) { entry ->
-                FinancialEntryItem(entry, onDelete = { onDeleteEntry(entry) })
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Histórico de Lançamentos", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(entries) { entry ->
+                    FinancialEntryItem(entry, onDelete = { onDeleteEntry(entry) })
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                }
             }
         }
     }
@@ -98,7 +137,7 @@ fun FinancialScreen(
 
 @Composable
 fun SummaryCard(label: String, value: Double, modifier: Modifier) {
-    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))) {
+    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f))) {
         Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = label, style = MaterialTheme.typography.labelSmall)
             Text(text = "R$ ${String.format("%.0f", value)}", fontWeight = FontWeight.Bold, fontSize = 14.sp, 

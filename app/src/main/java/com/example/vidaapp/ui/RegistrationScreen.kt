@@ -1,6 +1,7 @@
 package com.example.vidaapp.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
@@ -15,14 +16,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.vidaapp.model.MemberEntity // Import corrigido
-import com.example.vidaapp.util.isValidCpf
+import com.example.vidaapp.model.MemberEntity
+import com.example.vidaapp.util.isCpfValid
+import com.example.vidaapp.R
 
 @Composable
 fun RegistrationScreen(
@@ -56,142 +64,144 @@ fun RegistrationScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = if (memberToEdit == null) "Cadastro de Membro" else "Editar Membro",
-            style = MaterialTheme.typography.headlineSmall
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Logo de fundo (Identidade Vida APP)
+        Image(
+            painter = painterResource(id = R.drawable.logo_igreja),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(10.dp)
+                .alpha(0.05f),
+            contentScale = ContentScale.Fit
         )
-        Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Nome Completo") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = cpf,
-            onValueChange = { 
-                if (it.length <= 11) {
-                    cpf = it.filter { char -> char.isDigit() }
-                    cpfError = cpf.length == 11 && !isValidCpf(cpf)
-                }
-            },
-            label = { Text("CPF (somente números)") },
-            isError = cpfError,
-            supportingText = { if (cpfError) Text("CPF inválido") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Senha de Acesso") },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            trailingIcon = {
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                        contentDescription = null
-                    )
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = birthDate,
-            onValueChange = { birthDate = it },
-            label = { Text("Data de Nascimento (DD/MM/AAAA)") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = address,
-            onValueChange = { address = it },
-            label = { Text("Endereço Residencial") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = phone,
-            onValueChange = { phone = it },
-            label = { Text("Telefone") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = role,
-            onValueChange = { role = it },
-            label = { Text("Cargo/Função") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        
-        if (isAdminUser) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .toggleable(
-                        value = isMemberAdmin,
-                        onValueChange = { isMemberAdmin = it },
-                        role = Role.Checkbox
-                    )
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(checked = isMemberAdmin, onCheckedChange = null)
-                Text(
-                    text = "Acesso de Administrador",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                if (name.isNotBlank() && cpf.length == 11 && !cpfError && password.isNotBlank()) {
-                    val member = MemberEntity(
-                        idString = memberToEdit?.idString ?: "",
-                        name = name,
-                        cpf = cpf,
-                        birthDate = birthDate,
-                        address = address,
-                        phone = phone,
-                        role = role,
-                        password = password,
-                        isAdmin = isMemberAdmin
-                    )
-                    onSaveMember(member)
-                    Toast.makeText(context, "Salvo com sucesso!", Toast.LENGTH_SHORT).show()
-                }
-            },
-            enabled = name.isNotBlank() && cpf.length == 11 && !cpfError && password.isNotBlank(),
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(if (memberToEdit == null) Icons.Default.Add else Icons.Default.Check, null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(if (memberToEdit == null) "Confirmar Cadastro" else "Salvar Alterações")
+            // Logo no topo
+            Image(
+                painter = painterResource(id = R.drawable.logo_igreja),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(bottom = 8.dp),
+                contentScale = ContentScale.Fit
+            )
+
+            Text(
+                text = if (memberToEdit == null) "Cadastro de Membro" else "Editar Membro",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Formulário em um Card para destacar do fundo
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
+            ) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        label = { Text("Nome Completo") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
+                    )
+
+                    OutlinedTextField(
+                        value = cpf,
+                        onValueChange = { input ->
+                            if (input.length <= 11) {
+                                val numbers = input.filter { it.isDigit() }
+                                cpf = numbers
+                                // Uso de comparação explícita para evitar o erro do operador '!'
+                                cpfError = numbers.length == 11 && isCpfValid(numbers) == false
+                            }
+                        },
+                        label = { Text("CPF (apenas números)") },
+                        isError = cpfError,
+                        supportingText = { if (cpfError) Text("CPF inválido") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
+                    )
+
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("Senha") },
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                    contentDescription = null
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
+                    )
+
+                    OutlinedTextField(value = birthDate, onValueChange = { birthDate = it }, label = { Text("Nascimento (DD/MM/AAAA)") }, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Endereço") }, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text("Telefone") }, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone))
+                    OutlinedTextField(value = role, onValueChange = { role = it }, label = { Text("Cargo na Igreja") }, modifier = Modifier.fillMaxWidth())
+                    
+                    if (isAdminUser) {
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .toggleable(value = isMemberAdmin, onValueChange = { isMemberAdmin = it }, role = Role.Checkbox)
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(checked = isMemberAdmin, onCheckedChange = null)
+                            Text(text = "Acesso de Administrador", modifier = Modifier.padding(start = 16.dp))
+                        }
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    val validCpf = isCpfValid(cpf)
+                    if (name.isNotBlank() && cpf.length == 11 && validCpf && password.isNotBlank()) {
+                        val member = MemberEntity(
+                            idString = memberToEdit?.idString ?: "",
+                            name = name,
+                            cpf = cpf,
+                            birthDate = birthDate,
+                            address = address,
+                            phone = phone,
+                            role = role,
+                            password = password,
+                            isAdmin = isMemberAdmin
+                        )
+                        onSaveMember(member)
+                        Toast.makeText(context, "Salvo com sucesso!", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                enabled = name.isNotBlank() && cpf.length == 11 && cpfError == false && password.isNotBlank(),
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+            ) {
+                Icon(if (memberToEdit == null) Icons.Default.Add else Icons.Default.Check, null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(if (memberToEdit == null) "CONFIRMAR CADASTRO" else "SALVAR ALTERAÇÕES", fontWeight = FontWeight.Bold)
+            }
+            
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

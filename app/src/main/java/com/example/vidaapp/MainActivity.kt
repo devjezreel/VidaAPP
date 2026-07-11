@@ -24,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.vidaapp.model.UiState
 import com.example.vidaapp.model.*
 import com.example.vidaapp.ui.*
 import com.example.vidaapp.ui.theme.VidaAPPTheme
@@ -68,21 +67,22 @@ fun MainNavigation(mainViewModel: MainViewModel = viewModel()) {
         composable("welcome") {
             WelcomeScreen(
                 onEnterClick = { navController.navigate("login") },
-                onAdminClick = { navController.navigate("login") }
+                onAdminClick = { navController.navigate("login_admin") }
             )
         }
         composable("login") {
-            Box(modifier = Modifier.fillMaxSize()) {
-                LoginScreen(
-                    isAdminLogin = false,
-                    onLoginClick = { cpf, pass -> mainViewModel.login(cpf, pass) },
-                    onRegisterClick = { navController.navigate("register") },
-                    errorMessage = null 
-                )
-                if (authState is UiState.Loading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-            }
+            LoginScreen(
+                isAdminLogin = false,
+                onLoginClick = { cpf, pass -> mainViewModel.login(cpf, pass) },
+                onRegisterClick = { navController.navigate("register") }
+            )
+        }
+        composable("login_admin") {
+            LoginScreen(
+                isAdminLogin = true,
+                onLoginClick = { cpf, pass -> mainViewModel.login(cpf, pass) },
+                onRegisterClick = { navController.navigate("register") }
+            )
         }
         composable("register") {
             RegistrationScreen(
@@ -182,7 +182,7 @@ fun ChurchAppContent(mainViewModel: MainViewModel, onLogout: () -> Unit) {
                     AppDestinations.EVENTS -> EventsScreen(
                         isAdmin = isUserAdmin, 
                         events = eventsList.filter { it.location == selectedRegion || it.location == "Geral" }, 
-                        onSaveEvent = { t, d, dt, ti, loc -> mainViewModel.saveEvent(t, d, dt, ti, selectedRegion) }, 
+                        onSaveEvent = { t, d, dt, ti, loc -> mainViewModel.saveEvent(t, d, dt, ti, if(loc == "Geral") selectedRegion else loc) }, 
                         onDeleteEvent = { mainViewModel.deleteEvent(it) }
                     )
                     AppDestinations.BIRTHDAYS -> BirthdayScreen(

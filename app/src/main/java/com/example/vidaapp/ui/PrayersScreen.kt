@@ -1,5 +1,6 @@
 package com.example.vidaapp.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,10 +12,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.vidaapp.model.PrayerEntity // Import corrigido
+import com.example.vidaapp.model.PrayerEntity
+import com.example.vidaapp.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,43 +33,76 @@ fun PrayersScreen(
 ) {
     var prayerRequest by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "Pedidos de Oração", style = MaterialTheme.typography.headlineSmall)
-        
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Campo para novo pedido (apenas usuários logados podem ver/enviar)
-        OutlinedTextField(
-            value = prayerRequest,
-            onValueChange = { prayerRequest = it },
-            label = { Text("No que podemos orar por você?") },
-            modifier = Modifier.fillMaxWidth(),
-            trailingIcon = {
-                IconButton(onClick = { 
-                    if (prayerRequest.isNotBlank()) {
-                        onSendPrayer(prayerRequest)
-                        prayerRequest = ""
-                    }
-                }) {
-                    Icon(Icons.Default.Send, contentDescription = "Enviar")
-                }
-            }
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Logo de fundo (Identidade Vida APP)
+        Image(
+            painter = painterResource(id = R.drawable.logo_igreja),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(10.dp)
+                .alpha(0.05f),
+            contentScale = ContentScale.Fit
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            // Logo no topo
+            Image(
+                painter = painterResource(id = R.drawable.logo_igreja),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(bottom = 16.dp),
+                contentScale = ContentScale.Fit
+            )
 
-        Text(text = "Pedidos Recentes", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        
-        Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Pedidos de Oração", 
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
 
-        if (prayers.isEmpty()) {
-            Box(modifier = Modifier.fillWeight(1f), contentAlignment = Alignment.Center) {
-                Text("Nenhum pedido de oração no momento.", color = Color.Gray)
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
+            ) {
+                OutlinedTextField(
+                    value = prayerRequest,
+                    onValueChange = { prayerRequest = it },
+                    label = { Text("No que podemos orar por você?") },
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    trailingIcon = {
+                        IconButton(onClick = { 
+                            if (prayerRequest.isNotBlank()) {
+                                onSendPrayer(prayerRequest)
+                                prayerRequest = ""
+                            }
+                        }) {
+                            Icon(Icons.Default.Send, contentDescription = "Enviar", tint = MaterialTheme.colorScheme.primary)
+                        }
+                    }
+                )
             }
-        } else {
-            LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(prayers) { prayer ->
-                    PrayerItem(prayer, isAdmin, onDeletePrayer)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(text = "Mural de Clamor", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (prayers.isEmpty()) {
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    Text("Nenhum pedido no momento.", color = Color.Gray)
+                }
+            } else {
+                LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(prayers) { prayer ->
+                        PrayerItem(prayer, isAdmin, onDeletePrayer)
+                    }
                 }
             }
         }
@@ -76,7 +115,8 @@ fun PrayerItem(prayer: PrayerEntity, isAdmin: Boolean, onDelete: (PrayerEntity) 
     
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(2.dp)
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.Favorite, contentDescription = null, tint = Color.Red, modifier = Modifier.size(24.dp))
@@ -94,5 +134,3 @@ fun PrayerItem(prayer: PrayerEntity, isAdmin: Boolean, onDelete: (PrayerEntity) 
         }
     }
 }
-
-private fun Modifier.fillWeight(f: Float): Modifier = this.fillMaxWidth().fillMaxHeight(f)
