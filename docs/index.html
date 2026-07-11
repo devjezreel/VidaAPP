@@ -64,6 +64,8 @@
             font-weight: bold;
             transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            border: none;
         }
         
         .download-btn:hover {
@@ -105,7 +107,7 @@
         </p>
         
         <div class="download-section">
-            <a href="#apk" class="download-btn">⬇️ Baixar APK</a>
+            <a href="https://github.com/devjezreel/VidaAPP/releases/download/VidaAPP/vidaapp.apk" class="download-btn" download>⬇️ Baixar APK</a>
         </div>
         
         <div class="info">
@@ -120,16 +122,5 @@
             <p>© 2026 Igreja VIDA - Todos os direitos reservados</p>
         </footer>
     </div>
-    
-    <script>
-        // Redireciona para o APK quando clicado
-        document.querySelector('.download-btn').addEventListener('click', function(e) {
-            // SUBSTITUA PELA URL DO SEU APK
-            // Opções:
-            // 1. Se o APK está em /releases/ do GitHub
-            // 2. Se está em outro servidor
-            window.location.href = 'https://github.com/devjezreel/VidaAPP/releases/download/v1.0.0/VidaAPP.apk';
-        });
-    </script>
 </body>
 </html>
