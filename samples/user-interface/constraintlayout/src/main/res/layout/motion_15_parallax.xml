@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
-        android:src="@drawable/trees"
+        android:src="@drawable/logo_tree"
         tools:layout_editor_absoluteX="23dp"
         tools:layout_editor_absoluteY="130dp" />
 
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
-        android:src="@drawable/trees"
+        android:src="@drawable/logo_tree"
         tools:layout_editor_absoluteX="7dp"
         tools:layout_editor_absoluteY="98dp" />
 
